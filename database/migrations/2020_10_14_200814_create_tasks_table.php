@@ -19,6 +19,10 @@ class CreateTasksTable extends Migration
             $table->string('description');
             $table->integer('status');
             $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('user')
+                ->onCascade('delete');
             $table->timestamps();
         });
     }
