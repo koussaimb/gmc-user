@@ -4,24 +4,28 @@ namespace App\Http\Controllers;
 
 
 use App\Task;
-use Illuminate\View\View;
 
 class HomeController extends Controller
 {
 
+    //home controller for redirect to view
 
-    public function index(){
+    public function index()
+    {
         return View('pages.index');
     }
 
-    public function usersList(){
+    public function usersList()
+    {
         return View('pages.users_list');
     }
 
-    public function taskDetail($id){
-        if ($id){
+    public function taskDetail($id)
+    {
+        //check if task is exist then redirect to page with object like a params
+        if ($id) {
             $task = Task::find($id);
-            if ($task){
+            if ($task) {
                 return View('pages.task_detail', compact('task'));
             }
         }

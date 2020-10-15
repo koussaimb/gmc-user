@@ -25,33 +25,34 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
-            'name'        =>  'required|string|max:50',
-            'status'       => 'required',
+            'name' => 'required|string|max:50',
+            'status' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()->all()]);
+            return response()->json(['error' => $validator->errors()->all()]);
 
         }
 
         //check if user existe before store a task
         $user = User::find($request->user_id);
-        if ($user){
-                $task = new Task();
-                $task->name = $request->name;
-                $task->description = $request->description;
-                $task->status = $request->status;
-                $task->user()->associate($user);
-                $task->save();
+        if ($user) {
+            $task = new Task();
+            $task->name = $request->name;
+            $task->description = $request->description;
+            $task->status = $request->status;
+            $task->user()->associate($user);
+            $task->save();
             return new TaskResource($task);
         }
+
         return "user not found";
     }
 
@@ -59,17 +60,18 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        if ($id){
+        if ($id) {
             $user = User::find($id);
-            if ($user){
+            if ($user) {
                 return $user;
             }
         }
+
         return "no user found";
     }
 
@@ -77,20 +79,20 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
 
         $validator = Validator::make($request->all(), [
-            'name'        =>  'required|string|max:50',
-            'status'       => 'required',
+            'name' => 'required|string|max:50',
+            'status' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()->all()]);
+            return response()->json(['error' => $validator->errors()->all()]);
 
         }
 
@@ -99,6 +101,7 @@ class TaskController extends Controller
         $task->description = $request->description;
         $task->status = $request->status;
         $task->save();
+
         return new TaskResource($task);
     }
 
@@ -106,25 +109,27 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $task = Task::findOrfail($id);
-        if($task->delete()){
-            return  new TaskResource($task);
+        if ($task->delete()) {
+            return new TaskResource($task);
         }
+
         return "Error while deleting";
     }
 
-    public function tasksByUser($user_id){
+    public function tasksByUser($user_id)
+    {
 
         $user = User::find($user_id);
-        if ($user){
+        if ($user) {
             $task = Task::where('user_id', $user_id)->get();
 
-            return  new TaskResource($task);
+            return new TaskResource($task);
         }
 
         return "No Task Found";

@@ -25,20 +25,20 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
-            'name'       => 'required|string|max:50',
+            'name' => 'required|string|max:50',
             'first_name' => 'required|string|max:50',
-            'email'      => 'required|email|unique:users',
+            'email' => 'required|email|unique:users',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()->all()]);
+            return response()->json(['error' => $validator->errors()->all()]);
 
         }
 
@@ -55,39 +55,39 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-       if ($id){
-           $user = User::find($id);
-           if ($user){
-            return $user;
-           }
-       }
-       return "no user found";
+        if ($id) {
+            $user = User::find($id);
+            if ($user) {
+                return $user;
+            }
+        }
+        return "no user found";
     }
 
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
 
         $validator = Validator::make($request->all(), [
-            'name'       => 'required|string|max:50',
+            'name' => 'required|string|max:50',
             'first_name' => 'required|string|max:50',
-            'email'      => 'required|email|unique:users',
+            'email' => 'required|email|unique:users',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()->all()]);
+            return response()->json(['error' => $validator->errors()->all()]);
 
         }
 
@@ -96,6 +96,7 @@ class UserController extends Controller
         $user->first_name = $request->first_name;
         $user->email = $request->email;
         $user->save();
+
         return new UserResource($user);
     }
 
@@ -103,15 +104,16 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $user = User::findOrfail($id);
-        if($user->delete()){
-            return  new UserResource($user);
+        if ($user->delete()) {
+            return new UserResource($user);
         }
+
         return "Error while deleting";
     }
 }

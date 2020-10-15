@@ -1,18 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-    <style>
-        .task_done{
-            cursor: pointer;
-            text-decoration: line-through;
-        }
-        .task_not_done{
-            cursor: pointer;
-        }
-    </style>
-
     <div class="container">
-
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalAddUser" style="float: right">+ Ajouter un utilisateur </button>
 
         <table class="table table-condensed" style="border-collapse:collapse;">
@@ -102,10 +91,8 @@
                 type: 'GET',
                 url: '/api/users',
                 success: function (result) {
-                    if (typeof result.data.length !== 'undefined' && result.data.length > 0) {
-                        // the array is defined and has at least one element
-                    }
                     for (var i = 0; i < result.data.length; i++) {
+                        //get data from result to display inside table and create modal
                         $("#tbody_data").append(" <tr><td>" + [result.data[i].id] + "</td><td>" + [result.data[i].name] + "</td><td>" + [result.data[i].first_name] + "</td><td>" + [result.data[i].email] + "</td><td>" + [result.data[i].created_at] + "</td>" +
                             "<td data-toggle=\"collapse\" data-target="+"#"+[result.data[i].id]+" class=\"accordion-toggle\" onclick='getTaskByUser("+result.data[i].id+")'><i class=\"far fa-caret-square-down\"></i></td>" +
                             "<td><i style='color: blue; cursor: pointer'  data-toggle=\"modal\" data-target="+"#md"+[result.data[i].id]+"  class=\"fas fa-edit\"></i> " +

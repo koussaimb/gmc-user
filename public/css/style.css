@@ -6,3 +6,11 @@ footer{
     right: 0px;
     margin-bottom: 0px;
 }
+
+.task_done{
+    cursor: pointer;
+    text-decoration: line-through;
+}
+.task_not_done{
+    cursor: pointer;
+}

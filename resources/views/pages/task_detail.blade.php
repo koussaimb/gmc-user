@@ -2,10 +2,12 @@
 
 @section('content')
     @php
+      //check if task exist and get user
       if(isset($_GET['task']) && !is_null($_GET['task']))
         $task = $_GET['task'];
         $user = \App\User::find($task->user_id);
     @endphp
+
     <div class="container">
         <strong style="color: blue">Modification la tâche N° {{$task->id}} pour l'utilisateur {{$user->name}}</strong><br><br>
         <div class="col-lg-8">
@@ -26,12 +28,13 @@
     <script>
         $(document).ready(function () {
             $("#update_task").on("click", function () {
-                var task_id = $("#task_id").val();
-                var user_id = $("#user_id").val();
-                var edit_task_name  = $("#edit_task_name").val();
+                var task_id          = $("#task_id").val();
+                var user_id          = $("#user_id").val();
+                var edit_task_name   = $("#edit_task_name").val();
                 var edit_description = $("#edit_description").val();
-                var task_statut     = $('input[name="edit_task_statut"]:checked').val();
+                var task_statut      = $('input[name="edit_task_statut"]:checked').val();
 
+                //check if data has a value
                 if (!task_id || !user_id || !edit_task_name || !task_statut) {
                     $("#message_error_add_task").show();
                 }else{
@@ -46,6 +49,7 @@
                             user_id      : user_id,
                         },
                         success: function (result) {
+                            //redirect to route of users with tasks
                             window.location.href = "{{route("users_list")}}";
                         },
                         error: function (result) {

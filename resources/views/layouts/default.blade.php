@@ -41,6 +41,7 @@
 
 </head>
 <body>
+<!-- page in 3 partes nav, content and footer !-->
 
 @include('layouts.nav')
 
