@@ -1,8 +1,17 @@
 @extends('layouts.default')
 
 @section('content')
+    <style>
+        .task_done{
+            cursor: pointer;
+            text-decoration: line-through;
+        }
+        .task_not_done{
+            cursor: pointer;
+        }
+    </style>
     <div class="container">
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalAddUser" style="float: right">+ Ajouter </button>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalAddUser" style="float: right">+ Ajouter un utilisateur </button>
 
         <table class="table table-condensed" style="border-collapse:collapse;">
             <thead>
@@ -243,7 +252,11 @@
                     success: function (result) {
                         if (result){
                             for (var i = 0; i < result.data.length; i++){
-                                $("#tasks_"+user_id).append("<ul class=\"list-group\"> <li class=\"list-group-item list-group-item-warning\" id="+"item_task_"+ + [result.data[i].id] + "><a style='cursor: pointer'>" + [result.data[i].name] + " |<i>Description : " + [result.data[i].description] + "</i></a>" +
+                                //check if status == 1 is done so add class with line-through for text
+                                var style_status_task = "";
+                                style_status_task = result.data[i].status === 1 ? 'task_done' : 'task_not_done';
+
+                                $("#tasks_"+user_id).append("<ul class=\"list-group\"> <li class=\"list-group-item list-group-item-warning\" id="+"item_task_"+ + [result.data[i].id] + "><a   class=" + [style_status_task] + ">" + [result.data[i].name] + " |<i>Description : " + [result.data[i].description] + "</i></a>" +
                                     "<span onclick='deleteTask(" + [result.data[i].id] + ")'  style='color: red; cursor: pointer;'  class=\"fa-li\"><i class=\"fas fa-minus-circle\"></i></span></li>" +
                                     "<li onclick='toListRoute(" + [result.data[i].id] + ")'  id="+"item_task_updated_"+ + [result.data[i].id] + " class=\"list-group-item list-group-item-success\" style='cursor: pointer;' >Modifier </li></ul> <input type='hidden' id='getid' value=" + [result.data[i].id] + "> ");
                             }
