@@ -26,7 +26,7 @@
         </div>
 
         <!-- modal for add user !-->
-        <div id="display_modal_add_suer">
+        <div id="display_modal_add_user">
             <div class="modal fade" id="myModalAddUser" role="dialog">
                 <div class="modal-dialog">
 
@@ -44,6 +44,37 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" id="btn_add_user" name="btn_add_user"  class="btn btn-success">Ajouter</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- modal for add task !-->
+        <div id="display_modal_add_task">
+            <div class="modal fade" id="myModalAddTask" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <input type="hidden" id="user_id_for_task" name="user_id_for_task"  >
+                            <h4 class="modal-title">Ajouter une tâche</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p id="message_error_add_task" style="display: none; color: red">Merci de respecter les obligatoires !</p>
+                            <label for="add_task_name">Nom * : </label> <input required class="form-control" type="text" name="add_task_name" id="add_task_name" value="">
+                            <label for="add_description">Description  : </label> <textarea   class="form-control"  name="add_description" id="add_description" value="" > </textarea><br>
+                            <div class="form-control"><label> Statut * :</label>
+                            <label for="add_statut_done"> Terminée </label><input  type="radio" id="add_statut_done" name="task_statut" value=1 >
+                                <label for="add_statut_not_done"> Pas encore </label><input type="radio" id="add_statut_not_done" name="task_statut" value=0 checked>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="btn_add_task" name="btn_add_task"  class="btn btn-success">Ajouter</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -123,7 +154,42 @@
             });
 
 
+            $("#btn_add_task").on("click", function () {
+
+                var add_task_name = $("#add_task_name").val();
+                var add_description = $("#add_description").val();
+                var task_statut = $('input[name="task_statut"]:checked').val();
+                var user_id = $("#user_id_for_task").val();
+
+                if (user_id != null){
+
+                    if (!add_task_name && ! task_statut){
+                        $("#message_error_add_task").show();
+                    }else {
+                        $("#message_error_add_task").hide();
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/tasks/',
+                            data: {
+                                user_id :user_id,
+                                name: add_task_name,
+                                description: add_description,
+                                status: task_statut,
+                            },
+                            success: function (result) {
+                                window.location.reload(true);
+                            },
+                            error: function (result) {
+                            }
+                        });
+                    }
+                }else{
+                    alert("errue");
+                }
+            });
         });
+
+
 
         function  deleteUser(user_id) {
             if (user_id != null) {
@@ -131,7 +197,7 @@
                     type: 'DELETE',
                     url: '/api/users/'+user_id,
                     success: function (result) {
-
+                        window.location.reload(true);
                     },
                     error: function (result) {
                     }
@@ -178,10 +244,10 @@
                         if (result){
                             for (var i = 0; i < result.data.length; i++){
                                 $("#tasks_"+user_id).append("<ul class=\"list-group\"> <li class=\"list-group-item list-group-item-warning\" id="+"item_task_"+ + [result.data[i].id] + "><a style='cursor: pointer'>" + [result.data[i].name] + " |<i>Description : " + [result.data[i].description] + "</i></a>" +
-                                    "<span onclick='deleteTask(" + [result.data[i].id] + ")'  style='color: red;'  class=\"fa-li\"><i class=\"fas fa-minus-circle\"></i></span></li>" +
+                                    "<span onclick='deleteTask(" + [result.data[i].id] + ")'  style='color: red; cursor: pointer;'  class=\"fa-li\"><i class=\"fas fa-minus-circle\"></i></span></li>" +
                                     "<li  id="+"item_task_updated_"+ + [result.data[i].id] + " class=\"list-group-item list-group-item-success\">Modifier </li></ul>");
                             }
-                            $("#tasks_"+user_id).append("<ul class=\"list-group\"> <li class=\"list-group-item list-group-item-dark\" ><a style='cursor: pointer'>Ajouter une tâche</a> </ul>");
+                            $("#tasks_"+user_id).append("<ul class=\"list-group\"> <li class=\"list-group-item list-group-item-dark\" ><a id='opendModalAddTask'  data-toggle='modal'  data-target='#myModalAddTask' onclick='sendUserId(" + [user_id] + ")' style='cursor: pointer'>Ajouter une tâche</a> </ul>");
                         }
                     },
                     error: function (result) {
@@ -207,6 +273,10 @@
                    }
                });
            }
+        }
+
+        function sendUserId(user_id) {
+            $("#user_id_for_task").val(user_id);
         }
 
     </script>

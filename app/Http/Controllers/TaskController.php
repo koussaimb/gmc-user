@@ -38,8 +38,9 @@ class TaskController extends Controller
                 $task->status = $request->status;
                 $task->user()->associate($user);
                 $task->save();
+            return new TaskResource($task);
         }
-        return new TaskResource($task);
+        return "user not found";
     }
 
 
