@@ -93,4 +93,16 @@ class TaskController extends Controller
         }
         return "Error while deleting";
     }
+
+    public function tasksByUser($user_id){
+
+        $user = User::find($user_id);
+        if ($user){
+            $task = Task::where('user_id', $user_id)->get();
+
+            return  new TaskResource($task);
+        }
+
+        return "No Task Found";
+    }
 }

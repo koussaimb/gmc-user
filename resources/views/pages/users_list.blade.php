@@ -11,7 +11,7 @@
                 <th>Nom</th>
                 <th>Prénom</th>
                 <th>Email</th>
-                <th>Date</th>
+                <th>Date de création</th>
                 <th>Tâches</th>
                 <th>Actions</th>
             </tr>
@@ -62,7 +62,10 @@
                 success: function (result) {
                     for (var i = 0; i < result.data.length; i++) {
                         $("#tbody_data").append(" <tr><td>" + [result.data[i].id] + "</td><td>" + [result.data[i].name] + "</td><td>" + [result.data[i].first_name] + "</td><td>" + [result.data[i].email] + "</td><td>" + [result.data[i].created_at] + "</td>" +
-                        "<td data-toggle=\"collapse\" data-target=\"#demo1\" class=\"accordion-toggle\"><i class=\"far fa-caret-square-down\"></i></td><td><i style='color: blue; cursor: pointer'  data-toggle=\"modal\" data-target="+"#"+[result.data[i].id]+"  class=\"fas fa-edit\"></i> <i style='color:red; cursor: pointer' class=\"far fa-trash-alt\" id='btn_delete_user' onclick='deleteUser("+result.data[i].id+")'></i></td></tr><tr><td colspan=\"6\" class=\"hiddenRow\"><div class=\"accordian-body collapse\" id=\"demo1\"> Demo1 </div> </td></tr>");
+                        "<td data-toggle=\"collapse\" data-target="+"#"+[result.data[i].id]+" class=\"accordion-toggle\" onclick='getTaskByUser("+result.data[i].id+")'><i class=\"far fa-caret-square-down\"></i></td>" +
+                         "<td><i style='color: blue; cursor: pointer'  data-toggle=\"modal\" data-target="+"#"+[result.data[i].id]+"  class=\"fas fa-edit\"></i> " +
+                         "<i style='color:red; cursor: pointer' class=\"far fa-trash-alt\" id='btn_delete_user' onclick='deleteUser("+result.data[i].id+")'></i></td>" +
+                         "</tr><tr><td colspan=\"6\" class=\"hiddenRow\"><div class=\"accordian-body collapse\" id="+[result.data[i].id]+"> <div id="+"tasks_"+[result.data[i].id]+"></div> </div> </td></tr>");
 
                         //create a dynamic var name for input for disable confilt with same names
                         var edit_name_input = "edit_name_"+result.data[i].id;
@@ -165,6 +168,30 @@
 
             }
         }
+
+        function getTaskByUser(user_id) {
+            if (user_id != null) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/tasksByUser/'+user_id,
+                    success: function (result) {
+                        if (result){
+                            for (var i = 0; i < result.data.length; i++){
+                                $("#tasks_"+user_id).append("<ul class=\"list-group\"> <li class=\"list-group-item list-group-item-warning\" id=" + [result.data[i].id] + "><a style='cursor: pointer'>" + [result.data[i].name] + " <i>Description : aababab</i></a>" +
+                                                            "<span style='color: red;'  class=\"fa-li\"><i class=\"fas fa-minus-circle\"></i></span></li>" +
+                                                            "<li class=\"list-group-item list-group-item-success\">Modifier </li></ul>");
+                            }
+                            $("#tasks_"+user_id).append("<ul class=\"list-group\"> <li class=\"list-group-item list-group-item-dark\" ><a style='cursor: pointer'>Ajouter une tâche</a> </ul>");
+                        }
+                    },
+                    error: function (result) {
+
+                    }
+
+                });
+            }
+        }
+
     </script>
 @stop
 
