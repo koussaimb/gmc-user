@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -28,6 +30,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'name'       => 'required|string|max:50',
+            'first_name' => 'required|string|max:50',
+            'email'      => 'required|email|unique:users',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()->all()]);
+
+        }
+
+
         $user = new User();
         $user->name = $request->name;
         $user->first_name = $request->first_name;
@@ -64,6 +79,18 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $validator = Validator::make($request->all(), [
+            'name'       => 'required|string|max:50',
+            'first_name' => 'required|string|max:50',
+            'email'      => 'required|email|unique:users',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()->all()]);
+
+        }
+
         $user = User::find($id);
         $user->name = $request->name;
         $user->first_name = $request->first_name;

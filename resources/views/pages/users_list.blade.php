@@ -10,7 +10,9 @@
             cursor: pointer;
         }
     </style>
+
     <div class="container">
+
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalAddUser" style="float: right">+ Ajouter un utilisateur </button>
 
         <table class="table table-condensed" style="border-collapse:collapse;">
@@ -100,10 +102,13 @@
                 type: 'GET',
                 url: '/api/users',
                 success: function (result) {
+                    if (typeof result.data.length !== 'undefined' && result.data.length > 0) {
+                        // the array is defined and has at least one element
+                    }
                     for (var i = 0; i < result.data.length; i++) {
                         $("#tbody_data").append(" <tr><td>" + [result.data[i].id] + "</td><td>" + [result.data[i].name] + "</td><td>" + [result.data[i].first_name] + "</td><td>" + [result.data[i].email] + "</td><td>" + [result.data[i].created_at] + "</td>" +
                             "<td data-toggle=\"collapse\" data-target="+"#"+[result.data[i].id]+" class=\"accordion-toggle\" onclick='getTaskByUser("+result.data[i].id+")'><i class=\"far fa-caret-square-down\"></i></td>" +
-                            "<td><i style='color: blue; cursor: pointer'  data-toggle=\"modal\" data-target="+"#"+[result.data[i].id]+"  class=\"fas fa-edit\"></i> " +
+                            "<td><i style='color: blue; cursor: pointer'  data-toggle=\"modal\" data-target="+"#md"+[result.data[i].id]+"  class=\"fas fa-edit\"></i> " +
                             "<i style='color:red; cursor: pointer' class=\"far fa-trash-alt\" id='btn_delete_user' onclick='deleteUser("+result.data[i].id+")'></i></td>" +
                             "</tr><tr><td colspan=\"6\" class=\"hiddenRow\"><div class=\"accordian-body collapse\" id="+[result.data[i].id]+"> <div id="+"tasks_"+[result.data[i].id]+"></div> </div> </td></tr>");
 
@@ -112,7 +117,7 @@
                         var edit_first_name_input = "edit_first_name_"+result.data[i].id;
                         var edit_email_input = "edit_email_"+result.data[i].id;
 
-                        $("#display_modal_edit_user").append("<div class=\"modal fade\" id="+ [result.data[i].id] +" role=\"dialog\">\n" +
+                        $("#display_modal_edit_user").append("<div class=\"modal fade\" id="+"md"+ [result.data[i].id] +" role=\"dialog\">\n" +
                             "                <div class=\"modal-dialog\">\n" +
                             "                    <!-- Modal content-->\n" +
                             "                    <div class=\"modal-content\">\n" +
@@ -125,7 +130,7 @@
                             "                         <label for="+ [edit_email_input]+">Email :</label>     <input class=\"form-control\" type='email'name="+ [edit_email_input]+" id="+ [edit_email_input]+" value=" + [result.data[i].email] +" > \n" +
                             "                        </div>\n" +
                             "                        <div class=\"modal-footer\">\n" +
-                            "                            <button type=\"button\" onclick='editUser("+result.data[i].id+")' class=\"btn btn-success\" data-dismiss=\"modal\">Enregistrer</button>\n" +
+                            "                            <button type=\"button\" onclick='editUser("+result.data[i].id+")' class=\"btn btn-success\" >Enregistrer</button>\n" +
                             "                            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n" +
                             "                        </div></div>\n" +
                             "                 </div> </div>");
@@ -154,7 +159,12 @@
                             email       : add_email,
                         },
                         success: function (result) {
-                            window.location.reload(true);
+                          var  check_error = 'error' in result;
+                          if (check_error){
+                              alert(result.error[0]);
+                          }else{
+                              window.location.reload(true);
+                          }
                         },
                         error: function (result) {
                         }
@@ -186,7 +196,12 @@
                                 status: task_statut,
                             },
                             success: function (result) {
-                                window.location.reload(true);
+                                var  check_error = 'error' in result;
+                                if (check_error){
+                                    alert(result.error[0]);
+                                }else{
+                                    window.location.reload(true);
+                                }
                             },
                             error: function (result) {
                             }
@@ -202,15 +217,20 @@
 
         function  deleteUser(user_id) {
             if (user_id != null) {
-                $.ajax({
-                    type: 'DELETE',
-                    url: '/api/users/'+user_id,
-                    success: function (result) {
-                        window.location.reload(true);
-                    },
-                    error: function (result) {
-                    }
-                });
+                var result = confirm("vous êtes sur pour la supperession ?");
+                if (result){
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '/api/users/'+user_id,
+                        success: function (result) {
+                            window.location.reload(true);
+                        },
+                        error: function (result) {
+                        }
+                    });
+                }else{
+                    $("#display_modal_edit_user").hide();
+                }
             }
         }
 
@@ -234,7 +254,12 @@
                             email       : edit_email,
                         },
                         success: function (result) {
-                            window.location.reload(true);
+                            var  check_error = 'error' in result;
+                            if (check_error){
+                                alert(result.error[0]);
+                            }else{
+                                window.location.reload(true);
+                            }
                         },
                         error: function (result) {
                         }

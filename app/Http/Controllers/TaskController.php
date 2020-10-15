@@ -6,6 +6,7 @@ use App\Http\Resources\TaskResource;
 use App\Task;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
@@ -29,6 +30,17 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'name'        =>  'required|string|max:50',
+            'status'       => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()->all()]);
+
+        }
+
         //check if user existe before store a task
         $user = User::find($request->user_id);
         if ($user){
@@ -71,6 +83,17 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $validator = Validator::make($request->all(), [
+            'name'        =>  'required|string|max:50',
+            'status'       => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()->all()]);
+
+        }
+
         $task = Task::find($id);
         $task->name = $request->name;
         $task->description = $request->description;
