@@ -245,7 +245,7 @@
                             for (var i = 0; i < result.data.length; i++){
                                 $("#tasks_"+user_id).append("<ul class=\"list-group\"> <li class=\"list-group-item list-group-item-warning\" id="+"item_task_"+ + [result.data[i].id] + "><a style='cursor: pointer'>" + [result.data[i].name] + " |<i>Description : " + [result.data[i].description] + "</i></a>" +
                                     "<span onclick='deleteTask(" + [result.data[i].id] + ")'  style='color: red; cursor: pointer;'  class=\"fa-li\"><i class=\"fas fa-minus-circle\"></i></span></li>" +
-                                    "<li  id="+"item_task_updated_"+ + [result.data[i].id] + " class=\"list-group-item list-group-item-success\">Modifier </li></ul>");
+                                    "<li onclick='toListRoute(" + [result.data[i].id] + ")'  id="+"item_task_updated_"+ + [result.data[i].id] + " class=\"list-group-item list-group-item-success\" style='cursor: pointer;' >Modifier </li></ul> <input type='hidden' id='getid' value=" + [result.data[i].id] + "> ");
                             }
                             $("#tasks_"+user_id).append("<ul class=\"list-group\"> <li class=\"list-group-item list-group-item-dark\" ><a id='opendModalAddTask'  data-toggle='modal'  data-target='#myModalAddTask' onclick='sendUserId(" + [user_id] + ")' style='cursor: pointer'>Ajouter une tâche</a> </ul>");
                         }
@@ -277,6 +277,12 @@
 
         function sendUserId(user_id) {
             $("#user_id_for_task").val(user_id);
+        }
+
+        function toListRoute(task_id) {
+            if (task_id){
+                window.open('http://localhost:8000/task_detail/'+task_id, '_blank');
+            }
         }
 
     </script>

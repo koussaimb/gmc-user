@@ -20,3 +20,4 @@ Route::get('/', function () {
 
 Route::name('index')->get('/', 'HomeController@index');
 Route::name('users_list')->get('/users_list', 'HomeController@usersList');
+Route::name('task_detail/{id}')->get('/task_detail/{id}', 'HomeController@taskDetail');
