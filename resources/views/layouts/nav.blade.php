@@ -6,11 +6,11 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" >GMC User</a>
+            <a class="navbar-brand" href="{{ route('index') }}" >GMC User</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a >Home</a></li>
+                <li><a href="{{ route('users_list') }}">Utilisateurs</a></li>
             </ul>
         </div>
     </div>

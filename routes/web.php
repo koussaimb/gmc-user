@@ -12,7 +12,11 @@
 */
 
 Route::get('/', function () {
-    return view('default');
+    return view('pages.index');
 });
 
 //Auth::routes();
+
+
+Route::name('index')->get('/', 'HomeController@index');
+Route::name('users_list')->get('/users_list', 'HomeController@usersList');
