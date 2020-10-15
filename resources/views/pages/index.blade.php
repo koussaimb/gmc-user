@@ -1,7 +1,10 @@
 @extends('layouts.default')
 
 @section('content')
-    <div class="container">
-        <h3 class="text-center">Bienvenue</h3>
+
+    <div class="container text-center" >
+        <figure class="swing">
+            <img src="{{ URL::to('/') }}/gmc_logo.png" width="500" >
+        </figure>
     </div>
 @stop
