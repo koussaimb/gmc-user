@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="container">
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalAddUser" style="float: right">+ Ajouter un utilisateur </button>
-
-        <table class="table table-condensed" style="border-collapse:collapse;">
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalAddUser" style="float: right">+ Ajouter un utilisateur </button><br><br>
+        
+        <table class="table table-bordered table-hover" style="border-collapse:collapse;">
             <thead>
             <tr>
                 <th>#</th>

@@ -15,6 +15,51 @@ class ExampleTest extends TestCase
      */
     public function testBasicTest()
     {
-        $this->assertTrue(true);
+        $response = $this->call('GET', '/');
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function routeApiUserTest()
+    {
+        $response = $this->call('GET', '/api/users/');
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function routeApiTasksTest()
+    {
+        $response = $this->call('POST', '/api/tasks/');
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function routeApiAddUserTest()
+    {
+        $json = '
+            {
+                "name" : "koussay",
+                "first_name" : "mb",
+                "email" : "mb@gmail.Com"
+            }';
+
+        $response = $this->call('POST', '/api/users/', array(), array(), array(), array(), $json);
+
+        $response->assertStatus(200);
     }
 }
