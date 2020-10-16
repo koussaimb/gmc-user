@@ -217,6 +217,10 @@
                                 }else{
                                     getTaskByUser(user_id);
                                     $("#myModalAddTask").modal('toggle');
+                                    $("#add_task_name").val('');
+                                    $("#add_description").val('');
+                                    $('input[name="task_statut"]:checked').val('');
+                                    $("#user_id_for_task").val('');
                                 }
                             },
                             error: function (result) {
@@ -279,7 +283,6 @@
                                 $("#tr"+result.data.id).find("td:eq(1)").html(result.data.name);
                                 $("#tr"+result.data.id).find("td:eq(2)").html(result.data.first_name);
                                 $("#tr"+result.data.id).find("td:eq(3)").html(result.data.email);
-                                $("#display_modal_edit_user").hide();
                                 $("#md"+result.data.id).modal('toggle');
 
                             }
