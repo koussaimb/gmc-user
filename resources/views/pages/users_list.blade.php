@@ -93,11 +93,11 @@
                 success: function (result) {
                     for (var i = 0; i < result.data.length; i++) {
                         //get data from result to display inside table and create modal
-                        $("#tbody_data").append(" <tr><td>" + [result.data[i].id] + "</td><td>" + [result.data[i].name] + "</td><td>" + [result.data[i].first_name] + "</td><td>" + [result.data[i].email] + "</td><td>" + [result.data[i].created_at] + "</td>" +
+                        $("#tbody_data").append(" <tr id="+"tr"+[result.data[i].id]+" ><td>" + [result.data[i].id] + "</td><td>" + [result.data[i].name] + "</td><td>" + [result.data[i].first_name] + "</td><td>" + [result.data[i].email] + "</td><td>" + [result.data[i].created_at] + "</td>" +
                             "<td data-toggle=\"collapse\" data-target="+"#"+[result.data[i].id]+" class=\"accordion-toggle\" onclick='getTaskByUser("+result.data[i].id+")'><i class=\"far fa-caret-square-down\"></i></td>" +
                             "<td><i style='color: blue; cursor: pointer'  data-toggle=\"modal\" data-target="+"#md"+[result.data[i].id]+"  class=\"fas fa-edit\"></i> " +
                             "<i style='color:red; cursor: pointer' class=\"far fa-trash-alt\" id='btn_delete_user' onclick='deleteUser("+result.data[i].id+")'></i></td>" +
-                            "</tr><tr><td colspan=\"6\" class=\"hiddenRow\"><div class=\"accordian-body collapse\" id="+[result.data[i].id]+"> <div id="+"tasks_"+[result.data[i].id]+"></div> </div> </td></tr>");
+                            "</tr><tr><td colspan=\"6\"  id="+"col"+[result.data[i].id]+" class=\"hiddenRow\"><div class=\"accordian-body collapse\" id="+[result.data[i].id]+"> <div id="+"tasks_"+[result.data[i].id]+"></div> </div> </td></tr>");
 
                         //create a dynamic var name for input for disable confilt with same names
                         var edit_name_input = "edit_name_"+result.data[i].id;
@@ -150,7 +150,35 @@
                           if (check_error){
                               alert(result.error[0]);
                           }else{
-                              window.location.reload(true);
+                              $("#tbody_data").append(" <tr><td>" + [result.data.id] + "</td><td>" + [result.data.name] + "</td><td>" + [result.data.first_name] + "</td><td>" + [result.data.email] + "</td><td>" + [result.data.created_at] + "</td>" +
+                                  "<td data-toggle=\"collapse\" data-target="+"#"+[result.data.id]+" class=\"accordion-toggle\" onclick='getTaskByUser("+result.data.id+")'><i class=\"far fa-caret-square-down\"></i></td>" +
+                                  "<td><i style='color: blue; cursor: pointer'  data-toggle=\"modal\" data-target="+"#md"+[result.data.id]+"  class=\"fas fa-edit\"></i> " +
+                                  "<i style='color:red; cursor: pointer' class=\"far fa-trash-alt\" id='btn_delete_user' onclick='deleteUser("+result.data.id+")'></i></td>" +
+                                  "</tr><tr><td colspan=\"6\" class=\"hiddenRow\"><div class=\"accordian-body collapse\" id="+[result.data.id]+"> <div id="+"tasks_"+[result.data.id]+"></div> </div> </td></tr>");
+
+                              //create a dynamic var name for input for disable confilt with same names
+                              var edit_name_input = "edit_name_"+result.data.id;
+                              var edit_first_name_input = "edit_first_name_"+result.data.id;
+                              var edit_email_input = "edit_email_"+result.data.id;
+
+                              $("#display_modal_edit_user").append("<div class=\"modal fade\" id="+"md"+ [result.data.id] +" role=\"dialog\">\n" +
+                                  "                <div class=\"modal-dialog\">\n" +
+                                  "                    <!-- Modal content-->\n" +
+                                  "                    <div class=\"modal-content\">\n" +
+                                  "                        <div class=\"modal-header\">\n" +
+                                  "                            <button type=\"button\" class=\"close\" data-dismiss=\"modal\">&times;</button>\n" +
+                                  "                            <h4 class=\"modal-title\">Utilisateur N° " + [result.data.id] + " </h4> </div>\n" +
+                                  "                        <div class=\"modal-body\">\n" +
+                                  "                         <label for="+ [edit_name_input]+">Nom :</label>   <input class=\"form-control\" type='text' name="+ [edit_name_input]+" id="+ [edit_name_input]+" value=" + [result.data.name] +" ><br> \n" +
+                                  "                         <label  for="+ [edit_first_name_input]+">Prénom :</label>    <input class=\"form-control\" type='text' name="+ [edit_first_name_input]+" id="+ [edit_first_name_input]+" value=" + [result.data.first_name] +" > <br>\n" +
+                                  "                         <label for="+ [edit_email_input]+">Email :</label>     <input class=\"form-control\" type='email'name="+ [edit_email_input]+" id="+ [edit_email_input]+" value=" + [result.data.email] +" > \n" +
+                                  "                        </div>\n" +
+                                  "                        <div class=\"modal-footer\">\n" +
+                                  "                            <button type=\"button\" onclick='editUser("+result.data.id+")' class=\"btn btn-success\" >Enregistrer</button>\n" +
+                                  "                            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n" +
+                                  "                        </div></div>\n" +
+                                  "                 </div> </div>");
+                              $('#myModalAddUser').modal('toggle');
                           }
                         },
                         error: function (result) {
@@ -187,7 +215,8 @@
                                 if (check_error){
                                     alert(result.error[0]);
                                 }else{
-                                    window.location.reload(true);
+                                    getTaskByUser(user_id);
+                                    $("#myModalAddTask").modal('toggle');
                                 }
                             },
                             error: function (result) {
@@ -195,7 +224,7 @@
                         });
                     }
                 }else{
-                    alert("errue");
+                    alert("errure");
                 }
             });
         });
@@ -210,7 +239,9 @@
                         type: 'DELETE',
                         url: '/api/users/'+user_id,
                         success: function (result) {
-                            window.location.reload(true);
+                            $("#"+user_id).hide();
+                            $("#tr"+result.data.id).css("display", "none");
+                            $("#col"+result.data.id).css("display", "none");
                         },
                         error: function (result) {
                         }
@@ -245,7 +276,12 @@
                             if (check_error){
                                 alert(result.error[0]);
                             }else{
-                                window.location.reload(true);
+                                $("#tr"+result.data.id).find("td:eq(1)").html(result.data.name);
+                                $("#tr"+result.data.id).find("td:eq(2)").html(result.data.first_name);
+                                $("#tr"+result.data.id).find("td:eq(3)").html(result.data.email);
+                                $("#display_modal_edit_user").hide();
+                                $("#md"+result.data.id).modal('toggle');
+
                             }
                         },
                         error: function (result) {
@@ -263,6 +299,7 @@
                     url: '/api/tasksByUser/'+user_id,
                     success: function (result) {
                         if (result){
+                            $("#tasks_"+user_id).empty();
                             for (var i = 0; i < result.data.length; i++){
                                 //check if status == 1 is done so add class with line-through for text
                                 var style_status_task = "";
