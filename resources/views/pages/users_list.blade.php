@@ -150,11 +150,11 @@
                           if (check_error){
                               alert(result.error[0]);
                           }else{
-                              $("#tbody_data").append(" <tr><td>" + [result.data.id] + "</td><td>" + [result.data.name] + "</td><td>" + [result.data.first_name] + "</td><td>" + [result.data.email] + "</td><td>" + [result.data.created_at] + "</td>" +
+                              $("#tbody_data").append(" <tr id="+"tr"+[result.data.id]+" ><td>" + [result.data.id] + "</td><td>" + [result.data.name] + "</td><td>" + [result.data.first_name] + "</td><td>" + [result.data.email] + "</td><td>" + [result.data.created_at] + "</td>" +
                                   "<td data-toggle=\"collapse\" data-target="+"#"+[result.data.id]+" class=\"accordion-toggle\" onclick='getTaskByUser("+result.data.id+")'><i class=\"far fa-caret-square-down\"></i></td>" +
                                   "<td><i style='color: blue; cursor: pointer'  data-toggle=\"modal\" data-target="+"#md"+[result.data.id]+"  class=\"fas fa-edit\"></i> " +
                                   "<i style='color:red; cursor: pointer' class=\"far fa-trash-alt\" id='btn_delete_user' onclick='deleteUser("+result.data.id+")'></i></td>" +
-                                  "</tr><tr><td colspan=\"6\" class=\"hiddenRow\"><div class=\"accordian-body collapse\" id="+[result.data.id]+"> <div id="+"tasks_"+[result.data.id]+"></div> </div> </td></tr>");
+                                  "</tr><tr><td colspan=\"6\"  id="+"col"+[result.data.id]+" class=\"hiddenRow\"><div class=\"accordian-body collapse\" id="+[result.data.id]+"> <div id="+"tasks_"+[result.data.id]+"></div> </div> </td></tr>");
 
                               //create a dynamic var name for input for disable confilt with same names
                               var edit_name_input = "edit_name_"+result.data.id;
